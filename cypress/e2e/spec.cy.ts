@@ -1,4 +1,3 @@
-import { isTypedArray } from "cypress/types/lodash";
 import { mockData } from "./../../src/ts/services/__mocks__/movieservice";
 
 beforeEach(() => {
@@ -13,24 +12,22 @@ describe("heading title", () => {
 
 describe("inputfield", () => {
   it("should find input text", () => {
-    cy.get("title").contains("Async testing");
-
     cy.get("input").should("have.attr", "placeholder", "Skriv titel här");
   });
-  it("should be able to add text value", () => {
-    cy.get("title").contains("Async testing");
+  it("should be able to find text value", () => {
     cy.get("input").should("have.attr", "placeholder", "Skriv titel här");
-
+  });
+  it("should be able to type text", () => {
     cy.get("input").type("Star").should("have.value", "Star");
   });
-  it("should display error if input is less than 3 letter", () => {
+  it("should display error if input is less than 3 letters", () => {
     cy.get("input").type("ab");
     cy.intercept("GET", "http://omdbapi.com/*", {});
     cy.get("button").click();
     cy.get("p").contains("Inga sökresultat att visa");
   });
 
-  it("should display error if user type only numbers", () => {
+  it("should display error if user type numbers only", () => {
     cy.get("input").type("7345");
     cy.intercept("GET", "http://omdbapi.com/*", {});
     cy.get("button").click();
@@ -40,8 +37,6 @@ describe("inputfield", () => {
 
 describe("web request", () => {
   it("should get real data", () => {
-    cy.get("title").contains("Async testing");
-    cy.get("input").should("have.attr", "placeholder", "Skriv titel här");
     cy.get("input").type("Harry").should("have.value", "Harry");
     cy.get("button").click();
     cy.get("div.movie").contains("<h3>", "<img>");
@@ -50,9 +45,6 @@ describe("web request", () => {
     cy.get("div.movie").contains("<h3>", "<img>");
   });
   it("should get mockdata", () => {
-    cy.get("title").contains("Async testing");
-    cy.get("input").should("have.attr", "placeholder", "Skriv titel här");
-
     cy.intercept("GET", "http://omdbapi.com/*", mockData);
     cy.get("button").click();
     cy.get("div.movie").should("have.length", 3);
@@ -60,17 +52,12 @@ describe("web request", () => {
   });
 
   it("should not get data", () => {
-    cy.get("title").contains("Async testing");
-    cy.get("input").should("have.attr", "placeholder", "Skriv titel här");
     cy.intercept("GET", "http://omdbapi.com/*", {});
     cy.get("button").click();
-
     cy.get("p").contains("Inga sökresultat att visa");
   });
 
   it("should not accept empty inputfield", () => {
-    cy.get("title").contains("Async testing");
-    cy.get("input").should("have.attr", "placeholder", "Skriv titel här");
     cy.intercept("GET", "http://omdbapi.com/*", {});
     cy.get("button").click();
     cy.get("p").contains("Inga sökresultat att visa");
